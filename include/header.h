@@ -37,7 +37,7 @@ public:
     bool remove_edge(const Edge& e); //c учетом расст   ояния
     bool has_edge(const Vertex& _from, const Vertex& _to) const;
     bool has_edge(const Edge& e) const; //c учетом расстояния в Edge
-
+    std::vector<Edge> edges() const { return _edges; }
 
     size_t order() const; //порядок 
     size_t degree(const Vertex& v) const; //степень вершины
@@ -171,11 +171,13 @@ bool Graph<Vertex, Distance>::remove_vertex(const Vertex& v)
     return true;
 }
 
+
 template <typename Vertex, typename Distance>
 std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
 {
     return _vertices;
 }
+
 
 
 template <typename Vertex, typename Distance>
@@ -284,14 +286,54 @@ std::vector<Vertex> Graph<Vertex, Distance>::walk(const Vertex& start_vertex) co
     }
 
     std::cout << "---------------------------" << std::endl;
-
     for (auto& v : visited)
     {
         std::cout << v << std::endl;
     }
-
     std::cout << "---------------------------" << std::endl;
-
     return visited;
+}
 
+
+template <typename Vertex, typename Distance>
+Distance average_distance(const Vertex& v, const Graph<Vertex, Distance>& graph)
+{
+    Distance distance = 0;
+    size_t count = 0;
+
+    for (auto& e : graph.edges())
+    {
+        if (e._from == v || e._to == v)
+        {
+            distance += e._distance;
+            count++;
+        }
+    }
+
+    if (count == 0)
+    {
+        return std::numeric_limits<Distance>::max();
+    }
+
+    return distance / count;
+}
+
+template <typename Vertex, typename Distance>
+Distance distance_emergency_room(const Graph<Vertex, Distance>& graph)
+{
+    Vertex vertex;
+    Distance max_distance = -1;
+
+    for (auto& v : graph.vertices())
+    {
+        Distance average = average_distance(v, graph);
+
+        if (average > max_distance)
+        {
+            max_distance = average;
+            vertex = v;
+        }
+    }
+
+    return vertex;
 }

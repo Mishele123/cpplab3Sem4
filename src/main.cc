@@ -23,6 +23,8 @@ int main()
     graph.add_edge(3, 0, 5.0);
     graph.add_edge(0, 2, 4.0);
 
+    std::cout << distance_emergency_room(graph) << std::endl;
+
     graph.walk(0);
 
     graph.shortest_path(0, 2);
