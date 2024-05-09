@@ -21,8 +21,7 @@ public:
 
 
     //проверка-добавление-удаление ребер
-    void add_edge(const Vertex& from, const Vertex& to,
-        const Distance& d);
+    void add_edge(const Vertex& from, const Vertex& to, const Distance& d);
     bool remove_edge(const Vertex& from, const Vertex& to);
     bool remove_edge(const Edge& e); //c учетом расстояния
     bool has_edge(const Vertex& from, const Vertex& to) const;
@@ -50,7 +49,7 @@ private:
 template <typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::has_vertex(const Vertex& v) const
 {
-    return std::find(_vertices.begin(), _vertices.end(), v);
+    return std::find(_vertices.begin(), _vertices.end(), v) != _vertices.end();
 }
 
 template <typename Vertex, typename Distance>
@@ -87,4 +86,19 @@ template <typename Vertex, typename Distance>
 std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
 {
     return _vertices;
+}
+
+
+template <typename Vertex, typename Distance>
+bool Graph<Vertex, Distance>::has_edge(const Edge& e) const
+{
+    return std::find(_edges.begin(), _edges.end(), e) != edges.end();
+}
+
+
+template <typename Vertex, typename Distance>
+void  Graph<Vertex, Distance>::add_edge(const Vertex& from, const Vertex& to, const Distance& d)
+{
+    if (!has_edge({from, to, d}))
+        _edges.push_back({ from, to, d });
 }
