@@ -1,6 +1,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 
 template <typename Vertex, typename Distance = double>
@@ -32,12 +33,10 @@ public:
     //проверка-добавление-удаление ребер
     void add_edge(const Vertex& _from, const Vertex& _to, const Distance& d);
     bool remove_edge(const Vertex& _from, const Vertex& _to);
-    bool remove_edge(const Edge& e); //c учетом расстояния
+    bool remove_edge(const Edge& e); //c учетом расст   ояния
     bool has_edge(const Vertex& _from, const Vertex& _to) const;
     bool has_edge(const Edge& e) const; //c учетом расстояния в Edge
 
-    //получение всех ребер, выходящих из вершины
-    std::vector<Edge> edges(const Vertex& vertex);
 
     size_t order() const; //порядок 
     size_t degree(const Vertex& v) const; //степень вершины
@@ -46,7 +45,29 @@ public:
     //поиск кратчайшего пути
     std::vector<Edge> shortest_path(const Vertex& _from, const Vertex& _to) const;
     //обход
-    std::vector<Vertex>  walk(const Vertex& start_vertex)const;
+    std::vector<Vertex> walk(const Vertex& start_vertex)const;
+
+    void print_edges(const std::vector<Edge>& edges)
+    {
+        for (auto& e : edges)
+        {
+            std::cout << "from: " << e._from << " to: " << e._to << " distance: " << e._distance << std::endl;
+        }
+    }
+
+
+    //получение всех ребер, выходящих из вершины
+    std::vector<Edge> edges(const Vertex& vertex)
+    {
+        std::vector<Edge> res_edges;
+        for (auto &edge : _edges)
+        {
+            if (edge._from == vertex)
+                res_edges.push_back(edge);
+        }
+        return res_edges;
+    }
+
 
 private:
     std::vector<Vertex> _vertices;
@@ -153,4 +174,9 @@ bool Graph<Vertex, Distance>::remove_edge(const Edge& e)
     _edges.erase(it);
 
     return true;
+}
+template <typename Vertex, typename Distance>
+size_t Graph<Vertex, Distance>::order() const
+{
+    return _vertices.size();
 }
