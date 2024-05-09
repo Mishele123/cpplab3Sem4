@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <algorithm>
 
 
 template <typename Vertex, typename Distance = double>
@@ -12,7 +13,13 @@ public:
         Vertex _to;
         Distance _distance;
 
-        Edge(const Vertex& from, const Vertex& to, const Distance& distance) : _from(from), _to(to), _distance(distance) {}
+        Edge(const Vertex& _from, const Vertex& _to, const Distance& distance) : _from(_from), _to(_to), _distance(distance) {}
+
+        bool operator==(const Edge& other) const 
+        {
+            return (_from == other._from) && (_to == other._to) && (_distance == other._distance);
+        }
+
     };
 
     //проверка-добавление-удаление вершин
@@ -23,10 +30,10 @@ public:
 
 
     //проверка-добавление-удаление ребер
-    void add_edge(const Vertex& from, const Vertex& to, const Distance& d);
-    bool remove_edge(const Vertex& from, const Vertex& to);
+    void add_edge(const Vertex& _from, const Vertex& _to, const Distance& d);
+    bool remove_edge(const Vertex& _from, const Vertex& _to);
     bool remove_edge(const Edge& e); //c учетом расстояния
-    bool has_edge(const Vertex& from, const Vertex& to) const;
+    bool has_edge(const Vertex& _from, const Vertex& _to) const;
     bool has_edge(const Edge& e) const; //c учетом расстояния в Edge
 
     //получение всех ребер, выходящих из вершины
@@ -37,7 +44,7 @@ public:
 
 
     //поиск кратчайшего пути
-    std::vector<Edge> shortest_path(const Vertex& from, const Vertex& to) const;
+    std::vector<Edge> shortest_path(const Vertex& _from, const Vertex& _to) const;
     //обход
     std::vector<Vertex>  walk(const Vertex& start_vertex)const;
 
@@ -73,9 +80,9 @@ bool Graph<Vertex, Distance>::remove_vertex(const Vertex& v)
     auto edges_it = _edges.begin();
     while (edges_it != _edges.end())
     {
-        if (edges_it->from == v || edges_it->to == v)
+        if (edges_it->_from == v || edges_it->_to == v)
         {
-            _edges.erase(edges_it);
+            edges_it = _edges.erase(edges_it);
         }
         else
             edges_it++;
@@ -94,16 +101,16 @@ std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
 template <typename Vertex, typename Distance>
 bool Graph<Vertex, Distance>::has_edge(const Edge& e) const
 {
-    return std::find(_edges.begin(), _edges.end(), e) != edges.end();
+    return std::find(_edges.begin(), _edges.end(), e) != _edges.end();
 }
 
 
 template <typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::has_edge(const Vertex& from, const Vertex& to) const
+bool Graph<Vertex, Distance>::has_edge(const Vertex& _from, const Vertex& _to) const
 {
     for (const auto& edge : _edges)
     {
-        if (edge.from == from && edge.to == to)
+        if (edge._from == _from && edge._to == _to)
             return true;
     }
     return false;
@@ -111,22 +118,22 @@ bool Graph<Vertex, Distance>::has_edge(const Vertex& from, const Vertex& to) con
 
 
 template <typename Vertex, typename Distance>
-void  Graph<Vertex, Distance>::add_edge(const Vertex& from, const Vertex& to, const Distance& d)
+void  Graph<Vertex, Distance>::add_edge(const Vertex& _from, const Vertex& _to, const Distance& d)
 {
-    if (!has_edge({ from, to, d }))
-        _edges.push_back({ from, to, d });
+    if (!has_edge({ _from, _to, d }))
+        _edges.push_back({ _from, _to, d });
 }
 
 
 template <typename Vertex, typename Distance>
-bool Graph<Vertex, Distance>::remove_edge(const Vertex& from, const Vertex& to)
+bool Graph<Vertex, Distance>::remove_edge(const Vertex& _from, const Vertex& _to)
 {
-    if (!has_edge(from, to))
+    if (!has_edge(_from, _to))
         return false;
 
     for (auto it = _edges.begin(); it != _edges.end();)
     {
-        if (it->from == from && it->to == to)
+        if (it->_from == _from && it->_to == _to)
         {
             it = _edges.erase(it);
         }
