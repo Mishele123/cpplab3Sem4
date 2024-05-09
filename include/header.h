@@ -180,3 +180,15 @@ size_t Graph<Vertex, Distance>::order() const
 {
     return _vertices.size();
 }
+
+template <typename Vertex, typename Distance>
+size_t Graph<Vertex, Distance>::degree(const Vertex& v) const
+{
+    size_t count = 0;
+    for (auto& edge : _edges)
+    {
+        if (edge._from == v || edge._to == v)
+            count++;
+    }
+    return count;
+}

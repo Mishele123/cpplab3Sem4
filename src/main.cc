@@ -22,6 +22,7 @@ int main()
     graph.add_edge(4, 1, 5.0);
 
     graph.print_edges(graph.edges(1));
+    std::cout << "Degree for 1 = " << graph.degree(1) << std::endl;
 
     std::cout << graph.remove_vertex(2) << std::endl;
     std::cout << graph.has_edge({2, 3, 1.0}) << std::endl;
