@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <queue>
 
 
 template <typename Vertex, typename Distance = double>
@@ -45,7 +46,7 @@ public:
     //поиск кратчайшего пути
     std::vector<Edge> shortest_path(const Vertex& _from, const Vertex& _to) const;
     //обход
-    std::vector<Vertex> walk(const Vertex& start_vertex)const;
+    std::vector<Vertex> walk(const Vertex& start_vertex) const;
 
     void print_edges(const std::vector<Edge>& edges)
     {
@@ -191,4 +192,48 @@ size_t Graph<Vertex, Distance>::degree(const Vertex& v) const
             count++;
     }
     return count;
+}
+
+template <typename Vertex, typename Distance>
+std::vector<Vertex> Graph<Vertex, Distance>::walk(const Vertex& start_vertex) const
+{
+    std::vector<Vertex> visited;
+    std::vector<size_t> dist(order(), false);
+    std::queue<Vertex> q;
+
+    dist[start_vertex] = true;
+    q.push(start_vertex);
+
+    while (!q.empty())
+    {
+        Vertex current = q.front();
+        q.pop();
+
+        visited.push_back(current);
+
+        for (auto& edge : _edges)
+        {
+            if (edge._from == current)
+            {
+                if (!dist[edge._to])
+                {
+                    dist[edge._to] = true;
+                    q.push(edge._to);
+                }
+            }
+        }
+
+    }
+
+    std::cout << "---------------------------" << std::endl;
+
+    for (auto& v : visited)
+    {
+        std::cout << v << std::endl;
+    }
+
+    std::cout << "---------------------------" << std::endl;
+
+    return visited;
+
 }
