@@ -97,6 +97,18 @@ bool Graph<Vertex, Distance>::has_edge(const Edge& e) const
 
 
 template <typename Vertex, typename Distance>
+bool Graph<Vertex, Distance>::has_edge(const Vertex& from, const Vertex& to) const
+{
+    for (const auto &edge : _edges)
+    {
+        if (edge.from == from && edge.to == to)
+            return true;
+    }
+    return false;
+}
+
+
+template <typename Vertex, typename Distance>
 void  Graph<Vertex, Distance>::add_edge(const Vertex& from, const Vertex& to, const Distance& d)
 {
     if (!has_edge({from, to, d}))
