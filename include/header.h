@@ -44,7 +44,65 @@ public:
 
 
     //поиск кратчайшего пути
-    std::vector<Edge> shortest_path(const Vertex& _from, const Vertex& _to) const;
+    std::vector<Edge> shortest_path(const Vertex& _from, const Vertex& _to) const
+    {
+        std::vector<Edge> path;
+        std::vector<Distance> distance(_vertices.size(), std::numeric_limits<Distance>::max());
+        std::vector<Vertex> prev(_vertices.size(), Vertex());
+        
+        distance[_from] = 0;
+        prev[_from] = _from;
+
+        for (size_t i = 0; i < _vertices.size() - 1; i++)
+        {
+            bool updated = false;
+            for (auto& edge : _edges)
+            {
+                if (distance[edge._from] != std::numeric_limits<Distance>::max() &&
+                    distance[edge._from] + edge._distance < distance[edge._to])
+                {
+                    distance[edge._to] = distance[edge._from] + edge._distance;
+                    prev[edge._to] = edge._from;
+                    updated = true;
+                }
+            }
+            if (!updated)
+                break;
+        }
+
+        if (distance[_to] == std::numeric_limits<Distance>::max())
+        {
+            return path;
+        }
+
+        Vertex current = _to;
+        while (current != _from)
+        {
+            for (auto& edge : _edges)
+            {
+                if (edge._to == current && prev[current] == edge._from)
+                {
+                    path.emplace_back(edge);
+                    current = edge._from;
+                    break;
+                }
+            }
+        }
+
+        std::reverse(path.begin(), path.end());
+
+        std::cout << "Кратчайшее расстояние от " << _from << " до " << _to << ":" << std::endl;
+
+        for (auto& p : path)
+        {
+            std::cout << p._from << " - " << p._to << " = " << p._distance << std::endl;
+        }
+
+        return path;
+
+    }
+
+
     //обход
     std::vector<Vertex> walk(const Vertex& start_vertex) const;
 
