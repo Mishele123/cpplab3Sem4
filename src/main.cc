@@ -36,8 +36,19 @@ public:
 
 
     //поиск кратчайшего пути
-    std::vector<Edge> shortest_path(const Vertex& from,
-        const Vertex& to) const;
+    std::vector<Edge> shortest_path(const Vertex& from, const Vertex& to) const;
     //обход
     std::vector<Vertex>  walk(const Vertex& start_vertex)const;
+
+private:
+    std::vector<Vertex> _vertices;
+    std::vector<Edge> _edges;
 };
+
+
+
+template <typename Vertex, typename Distance>
+bool Graph<Vertex, Distance>::has_vertex(const Vertex& v) const
+{
+    return std::find(_vertices.begin(), _vertices.end(), v);
+}
