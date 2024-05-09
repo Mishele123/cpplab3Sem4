@@ -52,3 +52,10 @@ bool Graph<Vertex, Distance>::has_vertex(const Vertex& v) const
 {
     return std::find(_vertices.begin(), _vertices.end(), v);
 }
+
+template <typename Vertex, typename Distance>
+void Graph<Vertex, Distance>::add_vertex(const Vertex& v)
+{
+    if (!has_vertex(v))
+        _vertices.push_back(v);
+}
