@@ -59,3 +59,32 @@ void Graph<Vertex, Distance>::add_vertex(const Vertex& v)
     if (!has_vertex(v))
         _vertices.push_back(v);
 }
+
+template <typename Vertex, typename Distance>
+bool Graph<Vertex, Distance>::remove_vertex(const Vertex& v)
+{
+    auto it = std::find(_vertices.begin(), _vertices.end(), v);
+    if (it == _vertices.end())
+        return false;
+
+    _vertices.erase(it);
+
+    auto edges_it = _edges.begin();
+    while (edges_it != _edges.end())
+    {
+        if (edges_it->from == v || edges_it->to == v)
+        {
+            _edges.erase(edges_it);
+        }
+        else
+            edges_it++;
+    }
+
+    return true;
+}
+
+template <typename Vertex, typename Distance>
+std::vector<Vertex> Graph<Vertex, Distance>::vertices() const
+{
+    return _vertices;
+}
