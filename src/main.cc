@@ -35,6 +35,8 @@ int main()
     std::cout << graph.remove_vertex(2) << std::endl;
     std::cout << graph.has_edge({2, 3, 1.0}) << std::endl;
 
+    std::cout << graph.remove_edge({ 0, 1, 2.0 }) << std::endl;
+    std::cout << graph.has_edge({ 0, 1, 2.0 }) << std::endl;
 
 	return 0;
 }
